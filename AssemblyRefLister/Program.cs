@@ -20,8 +20,9 @@ namespace Pixelplastic
 
         static void PrintUsage()
         {
-            Console.WriteLine("Usage: {0}.exe <NameOfAssembly>     # without .dll or .exe extension", Assembly.GetExecutingAssembly().GetName().Name);
-            Console.WriteLine("       --no-gac   # will skip assemblies from GAC");
+            Console.WriteLine("\nAssemblyRefLister -- lists the reference of a given assembly\n");
+            Console.WriteLine("    Usage: \n\t{0}.exe <NameOfAssembly|PathToAssembly> (Options)\n", Assembly.GetExecutingAssembly().GetName().Name);
+            Console.WriteLine("    Options:  \n\t--no-gac          # will exclude assemblies from GAC");
         }
     }
 }
