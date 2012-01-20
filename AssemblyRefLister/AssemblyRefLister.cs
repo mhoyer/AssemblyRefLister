@@ -58,7 +58,11 @@ namespace Pixelplastic
 
         public void PrintAssemblyNameAndReferences(string fullName)
         {
-            if (!File.Exists(fullName)) PrintAssemblyNameAndReferences(new AssemblyName(fullName));
+            if (!File.Exists(fullName))
+            {
+                PrintAssemblyNameAndReferences(new AssemblyName(fullName));
+                return;
+            }
 
             fullName = Path.GetFullPath(fullName);
 
