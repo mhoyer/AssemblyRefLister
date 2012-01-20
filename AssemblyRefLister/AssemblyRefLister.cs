@@ -20,13 +20,6 @@ namespace Pixelplastic
             PrintAction = printAction ?? IndentedPrint;
         }
 
-        void IndentedPrint(string value)
-        {
-            for(var i=0; i<_indention;i++) Console.Write(" ");
-
-            Console.WriteLine(value);
-        }
-
         public void PrintAssemblyNameAndReferences(Assembly assembly)
         {
             if (!_includeGAC && assembly.GlobalAssemblyCache) return;
@@ -52,7 +45,7 @@ namespace Pixelplastic
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                PrintError(ex);
             }
         }
 
@@ -84,8 +77,22 @@ namespace Pixelplastic
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                PrintError(ex);
             }
+        }
+
+        void IndentedPrint(string value)
+        {
+            for (var i = 0; i < _indention; i++) Console.Write("  ");
+
+            Console.WriteLine(value);
+        }
+
+        void PrintError(Exception ex)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            IndentedPrint(ex.Message);
+            Console.ResetColor();
         }
     }
 }
