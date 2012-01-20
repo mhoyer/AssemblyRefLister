@@ -59,6 +59,20 @@ namespace Pixelplastic
 
             fullName = Path.GetFullPath(fullName);
 
+            ApplyAssemblyResolveHook(fullName);
+
+            try
+            {
+                PrintAssemblyNameAndReferences(Assembly.LoadFrom(fullName));
+            }
+            catch (Exception ex)
+            {
+                PrintError(ex);
+            }
+        }
+
+        void ApplyAssemblyResolveHook(string fullName)
+        {
             AppDomain.CurrentDomain.AssemblyResolve +=
                 (s, a) =>
                     {
@@ -70,15 +84,6 @@ namespace Pixelplastic
 
                         return null;
                     };
-
-            try
-            {
-                PrintAssemblyNameAndReferences(Assembly.LoadFrom(fullName));
-            }
-            catch (Exception ex)
-            {
-                PrintError(ex);
-            }
         }
 
         void IndentedPrint(string value)
