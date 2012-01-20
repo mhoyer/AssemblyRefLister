@@ -13,16 +13,16 @@ namespace Pixelplastic
                 return;
             }
 
-            var ignoreGAC = args.Length == 2 && args[1].ToLower() == "--no-gac";
+            var includeGAC = args.Length == 2 && args[1].ToLower() == "--with-gac";
 
-            new AssemblyRefLister(ignoreGAC).PrintAssemblyNameAndReferences(args[0]);
+            new AssemblyRefLister(includeGAC).PrintAssemblyNameAndReferences(args[0]);
         }
 
         static void PrintUsage()
         {
             Console.WriteLine("\nAssemblyRefLister -- lists the reference of a given assembly\n");
             Console.WriteLine("    Usage: \n\t{0}.exe <NameOfAssembly|PathToAssembly> (Options)\n", Assembly.GetExecutingAssembly().GetName().Name);
-            Console.WriteLine("    Options:  \n\t--no-gac          # will exclude assemblies from GAC");
+            Console.WriteLine("    Options:  \n\t--with-gac          # will include assemblies from GAC");
         }
     }
 }

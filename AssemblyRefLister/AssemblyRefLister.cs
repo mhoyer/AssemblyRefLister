@@ -7,15 +7,15 @@ namespace Pixelplastic
 {
     public class AssemblyRefLister
     {
-        readonly bool _ignoreGAC;
+        readonly bool _includeGAC;
         int _indention;
         readonly IList<string> _touchedRefs;
 
         public Action<string> PrintAction { get; private set; }
 
-        public AssemblyRefLister(bool ignoreGAC = true, Action<string> printAction = null)
+        public AssemblyRefLister(bool includeGAC = true, Action<string> printAction = null)
         {
-            _ignoreGAC = ignoreGAC;
+            _includeGAC = includeGAC;
             _touchedRefs = new List<string>();
             PrintAction = printAction ?? IndentedPrint;
         }
@@ -29,7 +29,7 @@ namespace Pixelplastic
 
         public void PrintAssemblyNameAndReferences(Assembly assembly)
         {
-            if (_ignoreGAC && assembly.GlobalAssemblyCache) return;
+            if (!_includeGAC && assembly.GlobalAssemblyCache) return;
 
             _touchedRefs.Add(assembly.FullName);
             PrintAction(assembly.FullName);
