@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace Pixelplastic
@@ -20,12 +21,19 @@ namespace Pixelplastic
             PrintAction = printAction ?? IndentedPrint;
         }
 
+
+        public static List<Type> TryToLoadAllTypes(Assembly assembly)
+        {
+            return assembly.GetTypes().ToList();
+        }
+
         public void PrintAssemblyNameAndReferences(Assembly assembly)
         {
             if (!_includeGAC && assembly.GlobalAssemblyCache) return;
 
             _touchedRefs.Add(assembly.FullName);
             PrintAction(assembly.FullName);
+            TryToLoadAllTypes(assembly);
 
             _indention++;
             foreach (var referencedAssembly in assembly.GetReferencedAssemblies())
@@ -53,7 +61,14 @@ namespace Pixelplastic
         {
             if (!File.Exists(fullName))
             {
-                PrintAssemblyNameAndReferences(new AssemblyName(fullName));
+                try
+                {
+                    PrintAssemblyNameAndReferences(new AssemblyName(fullName));
+                }
+                catch (Exception ex)
+                {
+                    PrintError(ex);
+                }
                 return;
             }
 
@@ -97,6 +112,14 @@ namespace Pixelplastic
         {
             Console.ForegroundColor = ConsoleColor.DarkRed;
             IndentedPrint(ex.Message);
+            var loaderEx = ex as ReflectionTypeLoadException;
+            if(loaderEx != null)
+            {
+                foreach (var loaderException in loaderEx.LoaderExceptions)
+                {
+                    PrintError(loaderException);
+                }
+            }
             Console.ResetColor();
         }
     }
