@@ -61,7 +61,14 @@ namespace Pixelplastic
         {
             if (!File.Exists(fullName))
             {
-                PrintAssemblyNameAndReferences(new AssemblyName(fullName));
+                try
+                {
+                    PrintAssemblyNameAndReferences(new AssemblyName(fullName));
+                }
+                catch (Exception ex)
+                {
+                    PrintError(ex);
+                }
                 return;
             }
 
